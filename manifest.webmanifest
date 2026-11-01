@@ -1,9 +1,11 @@
 {
   "name": "คำนวณรอบการนอน",
   "short_name": "รอบนอน",
+  "description": "คำนวณเวลาเข้านอนและเวลาตื่นตามรอบการนอน 90 นาที",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
+  "orientation": "portrait",
   "background_color": "#12142b",
   "theme_color": "#12142b",
   "lang": "th",

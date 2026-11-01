@@ -5,160 +5,189 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>คำนวณรอบการนอน</title>
 <link rel="manifest" href="manifest.webmanifest">
-<meta name="theme-color" content="#12142b">
+<meta name="theme-color" content="#0b0e24">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai+Looped:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai+Looped:wght@400;600&family=Prompt:wght@500;600&display=swap">
 <style>
-:root{--bg:#f3f2fa;--surface:#fff;--text:#1d1f3a;--muted:#5d6085;--accent:#8a5a00;--accent-bg:#fbe7b8;--line:#d9d8ec;--on-accent:#1d1f3a;
-color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#12142b;--surface:#1c1f3d;--text:#eceaf7;--muted:#9fa2c8;--accent:#f2c46d;--accent-bg:#3a3350;--line:#2e3260;--on-accent:#12142b;color-scheme:dark}}
-:root[data-theme="dark"]{--bg:#12142b;--surface:#1c1f3d;--text:#eceaf7;--muted:#9fa2c8;--accent:#f2c46d;--accent-bg:#3a3350;--line:#2e3260;--on-accent:#12142b;color-scheme:dark}
-*{box-sizing:border-box}
-html{scroll-padding-top:env(safe-area-inset-top,0px)}
-body{margin:0;background:var(--bg);color:var(--text);font-family:"Noto Sans Thai Looped","Sarabun","Noto Sans Thai",system-ui,sans-serif;line-height:1.6}
-main{max-width:480px;margin:0 auto;padding:20px 16px 40px}
-h1{font-size:1.5rem;margin:0 0 4px}
-.sub{color:var(--muted);margin:0 0 20px;font-size:.95rem}
-.seg{display:grid;grid-template-columns:1fr 1fr;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:4px;gap:4px;margin-bottom:18px}
-button{font:inherit;color:inherit;cursor:pointer}
-.seg button{border:0;background:none;padding:10px 8px;border-radius:9px;font-weight:600;color:var(--muted)}
-.seg button[aria-pressed="true"]{background:var(--accent);color:var(--on-accent)}
-label,.lbl{display:block;font-weight:600;margin:0 0 6px}
-.row{display:flex;gap:10px;margin-bottom:18px;align-items:flex-end}
-.row>div{flex:1}
-input[type=time],select{width:100%;font:inherit;font-size:1.25rem;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--text)}
-select{font-size:1rem}
-.now{border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:12px 14px;white-space:nowrap}
-.cyc{display:grid;grid-template-columns:repeat(8,1fr);gap:6px;margin-bottom:6px}
-.cyc button{border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:10px 0;font-weight:700;font-size:1.05rem}
-.cyc button[aria-pressed="true"]{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
-.hint{color:var(--muted);font-size:.85rem;margin:0 0 20px}
-.result{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:20px;margin-bottom:20px}
-.pair{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.pair small{display:block;color:var(--muted)}
-.big{font-size:2.6rem;font-weight:700;line-height:1.1;color:var(--accent);font-variant-numeric:tabular-nums}
-.note{font-size:.8rem;color:var(--muted);min-height:1.2em}
-.bar{display:flex;gap:3px;margin:16px 0 10px}
-.bar i{flex:1;height:10px;border-radius:5px;background:var(--accent)}
-.sum{margin:0;color:var(--muted);font-size:.95rem}
-table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
-th,td{padding:9px 6px;text-align:left;border-bottom:1px solid var(--line);font-size:.95rem}
-th{color:var(--muted);font-weight:600;font-size:.85rem}
-tbody tr{cursor:pointer}
-tbody tr[aria-selected="true"]{background:var(--accent-bg)}
-.tag{font-size:.8rem;color:var(--muted)}
-.tag.rec{color:var(--accent);font-weight:700}
-.scroll{overflow-x:auto}
-:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+:root{--ink:#0b0e24;--twi:#171b45;--line:#2a2f66;--moon:#dfe7ff;--mute:#8d94c7;--dawn:#ffb86b;color-scheme:dark}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{background:var(--ink)}
+body{margin:0;min-height:100vh;color:var(--moon);font-family:"Noto Sans Thai Looped","Sarabun",system-ui,sans-serif;line-height:1.6;
+background:
+radial-gradient(1.5px 1.5px at 12% 8%,#fff8 50%,transparent),radial-gradient(1px 1px at 78% 5%,#fff7 50%,transparent),
+radial-gradient(1.5px 1.5px at 90% 22%,#fff6 50%,transparent),radial-gradient(1px 1px at 6% 30%,#fff6 50%,transparent),
+radial-gradient(1px 1px at 55% 12%,#fff5 50%,transparent),
+linear-gradient(180deg,#141845 0%,var(--ink) 55%);
+padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px)}
+main{max-width:460px;margin:0 auto;padding:18px 16px 40px}
+h1{font:600 1.35rem/1.3 Prompt,"Noto Sans Thai Looped",sans-serif;margin:0 0 14px}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+:focus-visible{outline:3px solid var(--dawn);outline-offset:2px}
+.seg{display:grid;grid-template-columns:1fr 1fr;background:#ffffff0f;border-radius:14px;padding:4px;gap:4px}
+.seg button{padding:10px 6px;border-radius:11px;font-weight:600;color:var(--mute)}
+.seg button[aria-pressed="true"]{background:var(--moon);color:var(--ink)}
+.timebox{display:flex;align-items:center;justify-content:center;gap:10px;margin:18px 0 0}
+.timebox label{color:var(--mute);font-size:.95rem}
+input[type=time]{font:600 1.7rem Prompt,sans-serif;color:var(--moon);background:#ffffff12;border:1px solid var(--line);border-radius:12px;padding:6px 12px;width:150px;text-align:center}
+.now{font-size:.9rem;border:1px solid var(--line);border-radius:999px;padding:6px 14px;color:var(--moon)}
+.dial{position:relative;margin:4px auto 0;width:100%;max-width:340px}
+.dial svg{display:block;width:100%;height:auto;overflow:visible}
+.ctr{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none}
+.ctr b{font:600 2.4rem/1.1 Prompt,sans-serif}
+.ctr span{color:var(--mute);font-size:.95rem}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px}
+.stat{background:#ffffff0d;border:1px solid var(--line);border-radius:16px;padding:12px 14px}
+.stat small{color:var(--mute);display:block}
+.stat b{font:600 2rem/1.2 Prompt,sans-serif;font-variant-numeric:tabular-nums}
+.stat.w b{color:var(--dawn)}
+.stat i{font-style:normal;color:var(--mute);font-size:.8rem;min-height:1.2em;display:block}
+.step{display:flex;align-items:center;justify-content:center;gap:18px;margin:22px 0 4px}
+.step button{width:52px;height:52px;border-radius:50%;border:1px solid var(--line);background:#ffffff0f;font:500 1.6rem Prompt,sans-serif}
+.step button:disabled{opacity:.3;cursor:default}
+.step div{text-align:center;min-width:110px}
+.step b{font:600 1.7rem Prompt,sans-serif}
+.msg{text-align:center;color:var(--mute);font-size:.9rem;margin:0 0 16px;min-height:1.6em}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:2px 0 10px;scroll-snap-type:x proximity}
+.chips button{flex:0 0 auto;scroll-snap-align:start;border:1px solid var(--line);border-radius:14px;padding:8px 12px;text-align:center;background:#ffffff0a;min-width:92px}
+.chips button small{display:block;color:var(--mute);font-size:.75rem}
+.chips button b{font:500 1.05rem Prompt,sans-serif;font-variant-numeric:tabular-nums}
+.chips button[aria-pressed="true"]{border-color:var(--dawn);background:#ffb86b1f}
+.chips button.rec small{color:var(--dawn)}
+.lat{display:flex;align-items:center;justify-content:space-between;margin-top:8px;color:var(--mute);font-size:.9rem}
+select{font:inherit;color:var(--moon);background:#ffffff12;border:1px solid var(--line);border-radius:10px;padding:6px 10px}
+select option{color:#000}
+.foot{text-align:center;color:var(--mute);font-size:.75rem;margin-top:22px}
+.stat b{display:block}
+.dial::before{content:"";position:absolute;inset:8%;border-radius:50%;background:radial-gradient(circle,#6a5cff38,transparent 70%);animation:breathe 6s ease-in-out infinite;pointer-events:none}
+@keyframes breathe{50%{transform:scale(1.12);opacity:.55}}
+.arc{stroke-dasharray:1}
+.arc.go{animation:draw .55s cubic-bezier(.3,.7,.3,1) both}
+@keyframes draw{from{stroke-dashoffset:1}}
+.mk{transform-box:fill-box;transform-origin:center}
+.mk.go{animation:pop .5s cubic-bezier(.3,1.6,.5,1) both}
+@keyframes pop{from{transform:scale(0);opacity:0}}
+.bump{animation:bump .45s ease-out}
+@keyframes bump{40%{transform:scale(1.12);color:var(--dawn)}}
+.star{position:fixed;width:3px;height:3px;border-radius:50%;background:#fff;opacity:.15;pointer-events:none;animation:tw 4s ease-in-out infinite alternate}
+@keyframes tw{to{opacity:.9}}
+button{transition:transform .12s,background .25s,border-color .25s,color .25s}
+button:active:not(:disabled){transform:scale(.93)}
+@media (prefers-reduced-motion:reduce){*,*::before{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
+<i class="star" style="left:15%;top:12%;animation-delay:0.0s;animation-duration:3.5s"></i><i class="star" style="left:82%;top:9%;animation-delay:1.2s;animation-duration:4.5s"></i><i class="star" style="left:92%;top:34%;animation-delay:0.6s;animation-duration:5.0s"></i><i class="star" style="left:6%;top:42%;animation-delay:2.0s;animation-duration:4.0s"></i><i class="star" style="left:60%;top:6%;animation-delay:0.3s;animation-duration:3.0s"></i><i class="star" style="left:30%;top:3%;animation-delay:1.8s;animation-duration:5.5s"></i><i class="star" style="left:75%;top:60%;animation-delay:2.5s;animation-duration:4.0s"></i><i class="star" style="left:10%;top:75%;animation-delay:0.9s;animation-duration:3.8s"></i>
 <main>
 <h1>คำนวณรอบการนอน</h1>
-<p class="sub">1 รอบการนอนประมาณ 90 นาที เลือกจำนวนรอบเพื่อดูเวลานอนหรือเวลาตื่น</p>
 
 <div class="seg" role="group" aria-label="โหมดคำนวณ">
-  <button id="m-wake" aria-pressed="true">ฉันต้องตื่นตอน...</button>
-  <button id="m-sleep" aria-pressed="false">ฉันจะนอนตอน...</button>
+  <button id="m-wake" aria-pressed="true">ต้องตื่นตอน</button>
+  <button id="m-sleep" aria-pressed="false">จะนอนตอน</button>
 </div>
 
-<div class="row">
-  <div><label for="t" id="tl">เวลาที่ต้องตื่น</label><input type="time" id="t" value="07:00"></div>
+<div class="timebox">
+  <label for="t" id="tl">เวลาตื่น</label>
+  <input type="time" id="t" value="07:00">
   <button class="now" id="now" hidden>ตอนนี้</button>
 </div>
 
-<div class="lbl">จำนวนรอบที่ต้องการนอน</div>
-<div class="cyc" id="cyc" role="group" aria-label="จำนวนรอบ"></div>
-<p class="hint">ผู้ใหญ่ส่วนใหญ่เหมาะกับ 5–6 รอบ (7.5–9 ชั่วโมง)</p>
-
-<div class="row">
-  <div><label for="lat">เวลาหลับ หลังขึ้นเตียง</label>
-  <select id="lat"><option value="0">ทันที (0 นาที)</option><option value="10">10 นาที</option><option value="15" selected>15 นาที</option><option value="20">20 นาที</option><option value="30">30 นาที</option></select></div>
+<div class="dial">
+  <svg id="dial" viewBox="0 0 300 300" role="img" aria-label="วงนาฬิกา 24 ชั่วโมงแสดงช่วงเวลานอน"></svg>
+  <div class="ctr"><b id="dur">7.5 ชม.</b><span id="cn">5 รอบ</span></div>
 </div>
 
-<section class="result" aria-live="polite">
-  <div class="pair">
-    <div><small>เข้านอน</small><div class="big" id="bed">--:--</div><div class="note" id="bedn"></div></div>
-    <div><small>ตื่นนอน</small><div class="big" id="wake">--:--</div><div class="note" id="waken"></div></div>
-  </div>
-  <div class="bar" id="bar"></div>
-  <p class="sum" id="sum"></p>
-</section>
-
-<div class="scroll">
-<table>
-  <thead><tr><th>รอบ</th><th>นอนจริง</th><th id="c1">เข้านอน</th><th id="c2">ตื่น</th><th></th></tr></thead>
-  <tbody id="rows"></tbody>
-</table>
+<div class="stats">
+  <div class="stat"><small>เข้านอน</small><b id="bed">--:--</b><i id="bedn"></i></div>
+  <div class="stat w"><small>ตื่นนอน</small><b id="wake">--:--</b><i id="waken"></i></div>
 </div>
+
+<div class="step">
+  <button id="minus" aria-label="ลดหนึ่งรอบ">−</button>
+  <div><b id="cv">5</b><div style="color:var(--mute);font-size:.85rem">รอบการนอน</div></div>
+  <button id="plus" aria-label="เพิ่มหนึ่งรอบ">+</button>
+</div>
+<p class="msg" id="msg"></p>
+
+<div class="chips" id="chips" role="group" aria-label="เปรียบเทียบจำนวนรอบ"></div>
+
+<div class="lat">
+  <label for="lat">เวลาหลับหลังขึ้นเตียง</label>
+  <select id="lat"><option value="0">ทันที</option><option value="10">10 นาที</option><option value="15">15 นาที</option><option value="20">20 นาที</option><option value="30">30 นาที</option></select>
+</div>
+<p class="foot">1 รอบ = 90 นาที (ค่าเฉลี่ย แต่ละคนอาจต่างกันได้)</p>
 </main>
 
 <script>
 (function(){
-  var CYCLE=90;
-  var st={mode:'wake',cycles:5,lat:15,time:'07:00'};
+  var CY=90,st={mode:'wake',cycles:5,lat:15,time:'07:00'};
   try{var s=JSON.parse(localStorage.getItem('sleepcalc'));if(s&&typeof s==='object'){st.mode=s.mode==='sleep'?'sleep':'wake';st.cycles=Math.min(8,Math.max(1,+s.cycles||5));st.lat=+s.lat>=0?+s.lat:15;if(/^\d\d:\d\d$/.test(s.time))st.time=s.time;}}catch(e){}
-
-  var $=function(id){return document.getElementById(id)};
+  var $=function(i){return document.getElementById(i)};
   function save(){try{localStorage.setItem('sleepcalc',JSON.stringify(st))}catch(e){}}
-  function toMin(v){var p=v.split(':');return (+p[0])*60+(+p[1])}
+  function toMin(v){var p=v.split(':');return +p[0]*60+ +p[1]}
   function fmt(m){m=((m%1440)+1440)%1440;return String(Math.floor(m/60)).padStart(2,'0')+':'+String(m%60).padStart(2,'0')}
   function note(m){return m<0?'คืนก่อนหน้า':m>=1440?'วันถัดไป':''}
-  function hrs(c){var h=c*CYCLE/60;return (Math.round(h*10)/10).toString().replace(/\.0$/,'')+' ชม.'}
-  function calc(c){
-    var t=toMin(st.time),d=c*CYCLE;
-    return st.mode==='wake'?{bed:t-d-st.lat,wake:t}:{bed:t,wake:t+st.lat+d};
-  }
-  function tag(c){return c<=3?'น้อย':c===4?'พอใช้':c<=6?'แนะนำ':'มาก'}
+  function hrs(c){return (Math.round(c*CY/6)/10).toString().replace(/\.0$/,'')}
+  function calc(c){var t=toMin(st.time),d=c*CY;return st.mode==='wake'?{bed:t-d-st.lat,wake:t}:{bed:t,wake:t+st.lat+d}}
+  function pol(m,r){var a=m/1440*2*Math.PI;return [150+r*Math.sin(a),150-r*Math.cos(a)]}
+  function arc(a,b,r){var p=pol(a,r),q=pol(b,r);return 'M'+p[0].toFixed(1)+' '+p[1].toFixed(1)+'A'+r+' '+r+' 0 '+((b-a)>720?1:0)+' 1 '+q[0].toFixed(1)+' '+q[1].toFixed(1)}
+  function msg(c){return c<=3?'งีบสั้น ๆ เหมาะกับช่วงกลางวัน':c===4?'พอใช้ แต่ยังน้อยกว่าที่ผู้ใหญ่ส่วนใหญ่ต้องการ':c<=6?'ช่วงที่ผู้ใหญ่ส่วนใหญ่ควรนอน (7.5–9 ชั่วโมง)':'นอนยาวมาก อาจตื่นมางัวเงียได้'}
 
-  function render(){
+  function dial(r,anim){
+    var R=104,h='';
+    h+='<circle cx="150" cy="150" r="'+R+'" fill="none" stroke="#ffffff10" stroke-width="24"/>';
+    for(var i=0;i<24;i++){var a=i/24*2*Math.PI,l=i%6===0?9:5,x1=150+(R+18)*Math.sin(a),y1=150-(R+18)*Math.cos(a),x2=150+(R+18+l)*Math.sin(a),y2=150-(R+18+l)*Math.cos(a);
+      h+='<line x1="'+x1.toFixed(1)+'" y1="'+y1.toFixed(1)+'" x2="'+x2.toFixed(1)+'" y2="'+y2.toFixed(1)+'" stroke="#8d94c7" stroke-opacity="'+(i%6===0?.9:.4)+'" stroke-width="1.5"/>'}
+    [[0,'00'],[6,'06'],[12,'12'],[18,'18']].forEach(function(o){var p=pol(o[0]*60,R+40);h+='<text x="'+p[0].toFixed(1)+'" y="'+p[1].toFixed(1)+'" fill="#8d94c7" font-size="11" text-anchor="middle" dominant-baseline="central">'+o[1]+'</text>'});
+    var s0=r.bed+st.lat;
+    if(st.lat>0)h+='<path d="'+arc(r.bed,s0,R)+'" fill="none" stroke="#8d94c7" stroke-opacity=".5" stroke-width="24" stroke-dasharray="2 5"/>';
+    for(var c=0;c<st.cycles;c++){
+      var t=st.cycles>1?c/(st.cycles-1):0,col='hsl('+(255-t*215).toFixed(0)+',75%,64%)';
+      h+='<path class="arc'+(anim?' go':'')+'" pathLength="1" style="animation-delay:'+(c*0.1).toFixed(2)+'s" d="'+arc(s0+c*CY+2,s0+(c+1)*CY-2,R)+'" fill="none" stroke="'+col+'" stroke-width="24"/>'}
+    var m=pol(r.bed,R),w=pol(r.wake,R),g=anim?' go':'',d=(st.cycles*0.1+0.25).toFixed(2);
+    h+='<g class="mk'+g+'" style="animation-delay:'+d+'s"><circle cx="'+m[0].toFixed(1)+'" cy="'+m[1].toFixed(1)+'" r="16" fill="#0b0e24" stroke="#dfe7ff" stroke-width="2"/><text x="'+m[0].toFixed(1)+'" y="'+m[1].toFixed(1)+'" font-size="17" text-anchor="middle" dominant-baseline="central">🌙</text></g>';
+    h+='<g class="mk'+g+'" style="animation-delay:'+d+'s"><circle cx="'+w[0].toFixed(1)+'" cy="'+w[1].toFixed(1)+'" r="16" fill="#0b0e24" stroke="#ffb86b" stroke-width="2"/><text x="'+w[0].toFixed(1)+'" y="'+w[1].toFixed(1)+'" font-size="17" text-anchor="middle" dominant-baseline="central">☀️</text></g>';
+    $('dial').innerHTML=h;
+  }
+
+  function bump(ids){ids.forEach(function(i){var e=$(i);e.classList.remove('bump');void e.offsetWidth;e.classList.add('bump')})}
+  function render(anim){
     $('m-wake').setAttribute('aria-pressed',st.mode==='wake');
     $('m-sleep').setAttribute('aria-pressed',st.mode==='sleep');
-    $('tl').textContent=st.mode==='wake'?'เวลาที่ต้องตื่น':'เวลาที่จะเข้านอน';
+    $('tl').textContent=st.mode==='wake'?'เวลาตื่น':'เวลานอน';
     $('now').hidden=st.mode!=='sleep';
-    $('t').value=st.time;
-    $('lat').value=String(st.lat);
-
-    var cy=$('cyc');cy.innerHTML='';
-    for(var i=1;i<=8;i++){(function(i){
-      var b=document.createElement('button');b.textContent=i;
-      b.setAttribute('aria-pressed',i===st.cycles);
-      b.setAttribute('aria-label',i+' รอบ');
-      b.onclick=function(){st.cycles=i;save();render()};
-      cy.appendChild(b);
-    })(i)}
-
+    $('t').value=st.time;$('lat').value=String(st.lat);
     var r=calc(st.cycles);
+    dial(r,anim);
+    if(anim)bump(['dur','bed','wake']);
+    $('dur').textContent=hrs(st.cycles)+' ชม.';$('cn').textContent=st.cycles+' รอบ';
     $('bed').textContent=fmt(r.bed);$('bedn').textContent=note(r.bed);
     $('wake').textContent=fmt(r.wake);$('waken').textContent=note(r.wake);
-    var bar=$('bar');bar.innerHTML='';
-    for(var k=0;k<st.cycles;k++){bar.appendChild(document.createElement('i'))}
-    $('sum').textContent='นอน '+st.cycles+' รอบ = '+hrs(st.cycles)+' (ไม่รวมเวลาหลับ '+st.lat+' นาที)';
-
-    $('c1').textContent='เข้านอน';$('c2').textContent='ตื่น';
-    var tb=$('rows');tb.innerHTML='';
+    $('cv').textContent=st.cycles;
+    $('minus').disabled=st.cycles<=1;$('plus').disabled=st.cycles>=8;
+    $('msg').textContent=msg(st.cycles);
+    var ch=$('chips');ch.innerHTML='';
     for(var c=1;c<=8;c++){(function(c){
-      var x=calc(c),tr=document.createElement('tr');
-      tr.setAttribute('aria-selected',c===st.cycles);
-      tr.tabIndex=0;
-      var cells=[c,hrs(c),fmt(x.bed),fmt(x.wake)];
-      cells.forEach(function(v){var td=document.createElement('td');td.textContent=v;tr.appendChild(td)});
-      var tg=document.createElement('td');var sp=document.createElement('span');
-      sp.className='tag'+(c===5||c===6?' rec':'');sp.textContent=tag(c);tg.appendChild(sp);tr.appendChild(tg);
-      var pick=function(){st.cycles=c;save();render()};
-      tr.onclick=pick;
-      tr.onkeydown=function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();pick()}};
-      tb.appendChild(tr);
+      var x=calc(c),b=document.createElement('button');
+      b.setAttribute('aria-pressed',c===st.cycles);
+      if(c===5||c===6)b.className='rec';
+      var main=st.mode==='wake'?x.bed:x.wake;
+      b.innerHTML='<small>'+c+' รอบ · '+hrs(c)+' ชม.</small><b>'+(st.mode==='wake'?'นอน ':'ตื่น ')+fmt(main)+'</b>';
+      b.onclick=function(){st.cycles=c;save();render(true)};
+      ch.appendChild(b);
     })(c)}
+    var sel=ch.querySelector('[aria-pressed="true"]');
+    if(sel&&sel.scrollIntoView)ch.scrollLeft=Math.max(0,sel.offsetLeft-ch.clientWidth/2+sel.offsetWidth/2);
   }
 
-  $('m-wake').onclick=function(){st.mode='wake';save();render()};
-  $('m-sleep').onclick=function(){st.mode='sleep';save();render()};
+  $('m-wake').onclick=function(){st.mode='wake';save();render(true)};
+  $('m-sleep').onclick=function(){st.mode='sleep';save();render(true)};
   $('t').oninput=function(e){if(e.target.value){st.time=e.target.value;save();render()}};
   $('lat').onchange=function(e){st.lat=+e.target.value;save();render()};
+  $('minus').onclick=function(){if(st.cycles>1){st.cycles--;save();render(true)}};
+  $('plus').onclick=function(){if(st.cycles<8){st.cycles++;save();render(true)}};
   $('now').onclick=function(){var d=new Date();st.time=String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');save();render()};
-  render();
+  render(true);
 })();
 </script>
 <script>
