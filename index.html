@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>คำนวณรอบการนอน</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#12142b">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai+Looped:wght@400;600;700&display=swap">
+<style>
+:root{--bg:#f3f2fa;--surface:#fff;--text:#1d1f3a;--muted:#5d6085;--accent:#8a5a00;--accent-bg:#fbe7b8;--line:#d9d8ec;--on-accent:#1d1f3a;
+color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#12142b;--surface:#1c1f3d;--text:#eceaf7;--muted:#9fa2c8;--accent:#f2c46d;--accent-bg:#3a3350;--line:#2e3260;--on-accent:#12142b;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#12142b;--surface:#1c1f3d;--text:#eceaf7;--muted:#9fa2c8;--accent:#f2c46d;--accent-bg:#3a3350;--line:#2e3260;--on-accent:#12142b;color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--text);font-family:"Noto Sans Thai Looped","Sarabun","Noto Sans Thai",system-ui,sans-serif;line-height:1.6}
+main{max-width:480px;margin:0 auto;padding:20px 16px 40px}
+h1{font-size:1.5rem;margin:0 0 4px}
+.sub{color:var(--muted);margin:0 0 20px;font-size:.95rem}
+.seg{display:grid;grid-template-columns:1fr 1fr;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:4px;gap:4px;margin-bottom:18px}
+button{font:inherit;color:inherit;cursor:pointer}
+.seg button{border:0;background:none;padding:10px 8px;border-radius:9px;font-weight:600;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--on-accent)}
+label,.lbl{display:block;font-weight:600;margin:0 0 6px}
+.row{display:flex;gap:10px;margin-bottom:18px;align-items:flex-end}
+.row>div{flex:1}
+input[type=time],select{width:100%;font:inherit;font-size:1.25rem;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--text)}
+select{font-size:1rem}
+.now{border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:12px 14px;white-space:nowrap}
+.cyc{display:grid;grid-template-columns:repeat(8,1fr);gap:6px;margin-bottom:6px}
+.cyc button{border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:10px 0;font-weight:700;font-size:1.05rem}
+.cyc button[aria-pressed="true"]{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+.hint{color:var(--muted);font-size:.85rem;margin:0 0 20px}
+.result{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:20px;margin-bottom:20px}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.pair small{display:block;color:var(--muted)}
+.big{font-size:2.6rem;font-weight:700;line-height:1.1;color:var(--accent);font-variant-numeric:tabular-nums}
+.note{font-size:.8rem;color:var(--muted);min-height:1.2em}
+.bar{display:flex;gap:3px;margin:16px 0 10px}
+.bar i{flex:1;height:10px;border-radius:5px;background:var(--accent)}
+.sum{margin:0;color:var(--muted);font-size:.95rem}
+table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+th,td{padding:9px 6px;text-align:left;border-bottom:1px solid var(--line);font-size:.95rem}
+th{color:var(--muted);font-weight:600;font-size:.85rem}
+tbody tr{cursor:pointer}
+tbody tr[aria-selected="true"]{background:var(--accent-bg)}
+.tag{font-size:.8rem;color:var(--muted)}
+.tag.rec{color:var(--accent);font-weight:700}
+.scroll{overflow-x:auto}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+</style>
+</head>
+<body>
+<main>
+<h1>คำนวณรอบการนอน</h1>
+<p class="sub">1 รอบการนอนประมาณ 90 นาที เลือกจำนวนรอบเพื่อดูเวลานอนหรือเวลาตื่น</p>
+
+<div class="seg" role="group" aria-label="โหมดคำนวณ">
+  <button id="m-wake" aria-pressed="true">ฉันต้องตื่นตอน...</button>
+  <button id="m-sleep" aria-pressed="false">ฉันจะนอนตอน...</button>
+</div>
+
+<div class="row">
+  <div><label for="t" id="tl">เวลาที่ต้องตื่น</label><input type="time" id="t" value="07:00"></div>
+  <button class="now" id="now" hidden>ตอนนี้</button>
+</div>
+
+<div class="lbl">จำนวนรอบที่ต้องการนอน</div>
+<div class="cyc" id="cyc" role="group" aria-label="จำนวนรอบ"></div>
+<p class="hint">ผู้ใหญ่ส่วนใหญ่เหมาะกับ 5–6 รอบ (7.5–9 ชั่วโมง)</p>
+
+<div class="row">
+  <div><label for="lat">เวลาหลับ หลังขึ้นเตียง</label>
+  <select id="lat"><option value="0">ทันที (0 นาที)</option><option value="10">10 นาที</option><option value="15" selected>15 นาที</option><option value="20">20 นาที</option><option value="30">30 นาที</option></select></div>
+</div>
+
+<section class="result" aria-live="polite">
+  <div class="pair">
+    <div><small>เข้านอน</small><div class="big" id="bed">--:--</div><div class="note" id="bedn"></div></div>
+    <div><small>ตื่นนอน</small><div class="big" id="wake">--:--</div><div class="note" id="waken"></div></div>
+  </div>
+  <div class="bar" id="bar"></div>
+  <p class="sum" id="sum"></p>
+</section>
+
+<div class="scroll">
+<table>
+  <thead><tr><th>รอบ</th><th>นอนจริง</th><th id="c1">เข้านอน</th><th id="c2">ตื่น</th><th></th></tr></thead>
+  <tbody id="rows"></tbody>
+</table>
+</div>
+</main>
+
+<script>
+(function(){
+  var CYCLE=90;
+  var st={mode:'wake',cycles:5,lat:15,time:'07:00'};
+  try{var s=JSON.parse(localStorage.getItem('sleepcalc'));if(s&&typeof s==='object'){st.mode=s.mode==='sleep'?'sleep':'wake';st.cycles=Math.min(8,Math.max(1,+s.cycles||5));st.lat=+s.lat>=0?+s.lat:15;if(/^\d\d:\d\d$/.test(s.time))st.time=s.time;}}catch(e){}
+
+  var $=function(id){return document.getElementById(id)};
+  function save(){try{localStorage.setItem('sleepcalc',JSON.stringify(st))}catch(e){}}
+  function toMin(v){var p=v.split(':');return (+p[0])*60+(+p[1])}
+  function fmt(m){m=((m%1440)+1440)%1440;return String(Math.floor(m/60)).padStart(2,'0')+':'+String(m%60).padStart(2,'0')}
+  function note(m){return m<0?'คืนก่อนหน้า':m>=1440?'วันถัดไป':''}
+  function hrs(c){var h=c*CYCLE/60;return (Math.round(h*10)/10).toString().replace(/\.0$/,'')+' ชม.'}
+  function calc(c){
+    var t=toMin(st.time),d=c*CYCLE;
+    return st.mode==='wake'?{bed:t-d-st.lat,wake:t}:{bed:t,wake:t+st.lat+d};
+  }
+  function tag(c){return c<=3?'น้อย':c===4?'พอใช้':c<=6?'แนะนำ':'มาก'}
+
+  function render(){
+    $('m-wake').setAttribute('aria-pressed',st.mode==='wake');
+    $('m-sleep').setAttribute('aria-pressed',st.mode==='sleep');
+    $('tl').textContent=st.mode==='wake'?'เวลาที่ต้องตื่น':'เวลาที่จะเข้านอน';
+    $('now').hidden=st.mode!=='sleep';
+    $('t').value=st.time;
+    $('lat').value=String(st.lat);
+
+    var cy=$('cyc');cy.innerHTML='';
+    for(var i=1;i<=8;i++){(function(i){
+      var b=document.createElement('button');b.textContent=i;
+      b.setAttribute('aria-pressed',i===st.cycles);
+      b.setAttribute('aria-label',i+' รอบ');
+      b.onclick=function(){st.cycles=i;save();render()};
+      cy.appendChild(b);
+    })(i)}
+
+    var r=calc(st.cycles);
+    $('bed').textContent=fmt(r.bed);$('bedn').textContent=note(r.bed);
+    $('wake').textContent=fmt(r.wake);$('waken').textContent=note(r.wake);
+    var bar=$('bar');bar.innerHTML='';
+    for(var k=0;k<st.cycles;k++){bar.appendChild(document.createElement('i'))}
+    $('sum').textContent='นอน '+st.cycles+' รอบ = '+hrs(st.cycles)+' (ไม่รวมเวลาหลับ '+st.lat+' นาที)';
+
+    $('c1').textContent='เข้านอน';$('c2').textContent='ตื่น';
+    var tb=$('rows');tb.innerHTML='';
+    for(var c=1;c<=8;c++){(function(c){
+      var x=calc(c),tr=document.createElement('tr');
+      tr.setAttribute('aria-selected',c===st.cycles);
+      tr.tabIndex=0;
+      var cells=[c,hrs(c),fmt(x.bed),fmt(x.wake)];
+      cells.forEach(function(v){var td=document.createElement('td');td.textContent=v;tr.appendChild(td)});
+      var tg=document.createElement('td');var sp=document.createElement('span');
+      sp.className='tag'+(c===5||c===6?' rec':'');sp.textContent=tag(c);tg.appendChild(sp);tr.appendChild(tg);
+      var pick=function(){st.cycles=c;save();render()};
+      tr.onclick=pick;
+      tr.onkeydown=function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();pick()}};
+      tb.appendChild(tr);
+    })(c)}
+  }
+
+  $('m-wake').onclick=function(){st.mode='wake';save();render()};
+  $('m-sleep').onclick=function(){st.mode='sleep';save();render()};
+  $('t').oninput=function(e){if(e.target.value){st.time=e.target.value;save();render()}};
+  $('lat').onchange=function(e){st.lat=+e.target.value;save();render()};
+  $('now').onclick=function(){var d=new Date();st.time=String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');save();render()};
+  render();
+})();
+</script>
+<script>
+if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){})})}
+</script>
+</body>
+</html>
